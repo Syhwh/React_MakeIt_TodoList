@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { Container, Row, Col, Table, Form, Button, Card } from 'react-bootstrap'
 import './App.css';
 
 class App extends Component {
@@ -104,42 +106,59 @@ class App extends Component {
 
 
   render() {
-
-
-
     return (
       <div className="App">
-        <ul>
-          {this.state.tasks.map(
-            (task) =>
-
-              <li key={task.id} >
-                <div className={task.edit ? 'edit' : null}>
-                  <span onClick={() => this.handleDone(task.id)} className={task.done ? 'done' : ''} >   {task.title}  </span>
-                  <span>{task.description}</span>
-                  <span onClick={() => this.handleEdit(task.id)}><FontAwesomeIcon icon={faEdit} /></span>
-                  <span onClick={() => this.handleDelete(task.id)}><FontAwesomeIcon icon={faTrash} /> </span>
-                </div>
-                <div className={task.edit ? null : 'edit'} >
-                  <input type='text' placeholder={task.title} name='title' onChange={this.handleOnChange} />
-                  <textarea placeholder={task.description} name='description' onChange={this.handleOnChange} />
-                  <button onClick={() => this.handleEditContent(task.id)} type="submit">Save</button>
-                  <button onClick={() => this.handleEdit(task.id)}>Cancel</button>
-                </div>
-              </li>)}
-        </ul>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor='title' >Task Name</label>
-          <input type='text' placeholder='Insert your task title' name='title' onChange={this.handleOnChange} />
-          <label htmlFor='description' >Task Description</label>
-          <textarea type='submit' placeholder='Insert your task description' name='description' onChange={this.handleOnChange} />
-          <button type="submit">Submit</button>
-        </form>
-
+        <Container>
+          <Row>
+            <Col>
+              <Card style={{ width: '18rem' }}  >
+                <Card.Body>
+                  <Card.Title>Tasks App</Card.Title>
+                  <Form onSubmit={this.handleSubmit}>
+                    <Form.Group controlId="taskName">
+                      <Form.Label>Task Name</Form.Label>
+                      <Form.Control type='text' placeholder='Insert your task title' name='title' onChange={this.handleOnChange} />
+                    </Form.Group>
+                    <Form.Group controlId="taskName">
+                      <Form.Label>Task Description</Form.Label>
+                      <Form.Control as="textarea" rows="3" placeholder='Insert your task description' name='description' onChange={this.handleOnChange} />
+                    </Form.Group>
+                    <Button type="submit">Submit</Button>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Task Name</th>
+                    <th>Task Description</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.tasks.map(
+                    (task) =>
+                      <tr key={task.id} >
+                        <td>{task.id} </td>
+                        <td onClick={() => this.handleDone(task.id)} className={task.done ? 'done' : ''} >   {task.title}  </td>
+                        <td>{task.description}</td>
+                        <td>
+                          <span onClick={() => this.handleEdit(task.id)}><FontAwesomeIcon icon={faEdit} /></span>
+                          <span onClick={() => this.handleDelete(task.id)}><FontAwesomeIcon icon={faTrash} /> </span>
+                        </td>
+                      </tr>
+                  )}
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }
-
 }
 
 export default App;
