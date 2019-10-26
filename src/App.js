@@ -11,9 +11,11 @@ class App extends Component {
         id: 1,
         title: 'First task',
         description: 'First task description',
-        done: false
+        done: false,
+        edit: false
       }],
-      newTask: ''
+      newTask: '',
+
     }
   }
 
@@ -67,7 +69,8 @@ class App extends Component {
     this.setState(state => {
       const tasks = state.tasks.map(task => {
         if (task.id === id) {
-          // edit the task
+          task.edit = !task.edit;
+          return task
         } else {
           return task
         }
@@ -77,25 +80,58 @@ class App extends Component {
       }
     })
   }
+
+
+  handleEditContent = (id) => {
+    this.setState(state => {
+      const tasks = state.tasks.map(task => {
+        if (task.id === id) {
+          task.title = this.state.title
+          task.description = this.state.description
+          task.done = false
+          task.edit = false
+          return task
+        } else {
+          return task
+        }
+      });
+      return {
+        tasks
+      }
+    });
+  }
+
+
+
   render() {
+
+
+
     return (
       <div className="App">
         <ul>
           {this.state.tasks.map(
             (task) =>
+
               <li key={task.id} >
-                <span onClick={() => this.handleDone(task.id)} className={task.done ? 'done' : ''}>   {task.title}  </span>
-                <span>{task.description}</span>
-                <span onClick={() => this.handleEdit(task.id)}><FontAwesomeIcon icon={faEdit} /></span>
-                <span onClick={() => this.handleDelete(task.id)}><FontAwesomeIcon icon={faTrash} /> </span>
-
-
+                <div className={task.edit ? 'edit' : null}>
+                  <span onClick={() => this.handleDone(task.id)} className={task.done ? 'done' : ''} >   {task.title}  </span>
+                  <span>{task.description}</span>
+                  <span onClick={() => this.handleEdit(task.id)}><FontAwesomeIcon icon={faEdit} /></span>
+                  <span onClick={() => this.handleDelete(task.id)}><FontAwesomeIcon icon={faTrash} /> </span>
+                </div>
+                <div className={task.edit ? null : 'edit'} >
+                  <input type='text' placeholder={task.title} name='title' onChange={this.handleOnChange} />
+                  <textarea placeholder={task.description} name='description' onChange={this.handleOnChange} />
+                  <button onClick={() => this.handleEditContent(task.id)} type="submit">Save</button>
+                  <button onClick={() => this.handleEdit(task.id)}>Cancel</button>
+                </div>
               </li>)}
         </ul>
         <form onSubmit={this.handleSubmit}>
-          <label htmlFor='taskName' >Task Name</label>
+          <label htmlFor='title' >Task Name</label>
           <input type='text' placeholder='Insert your task title' name='title' onChange={this.handleOnChange} />
-          <label htmlFor='taskDescription' >Task Description</label>
+          <label htmlFor='description' >Task Description</label>
           <textarea type='submit' placeholder='Insert your task description' name='description' onChange={this.handleOnChange} />
           <button type="submit">Submit</button>
         </form>

@@ -14,3 +14,7 @@ code {
 ul li span.done {
   text-decoration: line-through;
 }
+
+.edit{
+  display: none;
+}
